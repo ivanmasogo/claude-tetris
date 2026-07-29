@@ -19,6 +19,8 @@
   --btn-hover: #9bbdff;
   --switch-bg: #22223a;
   --switch-knob: #7aa2f7;
+  --highlight-bg: rgba(122, 162, 247, 0.18);
+  --highlight-border: #7aa2f7;
 }
 
 body.light-theme {
@@ -42,6 +44,8 @@ body.light-theme {
   --btn-hover: #5b7cc9;
   --switch-bg: #c7c7d6;
   --switch-knob: #3f5fb5;
+  --highlight-bg: rgba(63, 95, 181, 0.12);
+  --highlight-border: #3f5fb5;
 }
 
 *, *::before, *::after {
@@ -66,13 +70,50 @@ body {
   position: relative;
 }
 
+/* ---- Barra superior ---- */
+.top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 12px;
+}
+
+/* ---- Selector de skin ---- */
+.skin-selector {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.skin-selector label {
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: var(--label-color);
+  font-weight: 600;
+}
+
+.skin-selector select {
+  background: var(--kbd-bg);
+  color: var(--text);
+  border: 1px solid var(--kbd-border);
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 12px;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.skin-selector select:focus {
+  outline: 1px solid var(--value-color);
+}
+
 /* ---- Toggle de tema ---- */
 .theme-toggle {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  margin-bottom: 12px;
 }
 
 .theme-icon {
@@ -258,4 +299,203 @@ kbd {
 
 #restart-btn:hover {
   background: var(--btn-hover);
+}
+
+.hidden {
+  display: none;
+}
+
+/* ---- Tabla de récords ---- */
+.records-section {
+  gap: 8px;
+}
+
+.scores-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+}
+
+.scores-table th,
+.scores-table td {
+  padding: 3px 4px;
+  text-align: left;
+  color: var(--controls-color);
+  white-space: nowrap;
+}
+
+.scores-table th {
+  font-size: 9px;
+  letter-spacing: 1px;
+  color: var(--label-color);
+  border-bottom: 1px solid var(--board-border);
+  font-weight: 600;
+}
+
+.scores-table th:nth-child(3),
+.scores-table th:nth-child(4),
+.scores-table th:nth-child(5),
+.scores-table td:nth-child(3),
+.scores-table td:nth-child(4),
+.scores-table td:nth-child(5) {
+  text-align: right;
+}
+
+.scores-empty {
+  color: var(--label-color);
+  font-style: italic;
+  text-align: center;
+}
+
+.score-highlight td {
+  background: var(--highlight-bg);
+  color: var(--value-color);
+  font-weight: 700;
+  border-top: 1px solid var(--highlight-border);
+  border-bottom: 1px solid var(--highlight-border);
+}
+
+.reset-btn {
+  align-self: flex-start;
+  margin-top: 4px;
+  background: transparent;
+  color: var(--controls-color);
+  border: 1px solid var(--kbd-border);
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: 11px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.reset-btn:hover {
+  background: var(--kbd-bg);
+  color: var(--text);
+}
+
+/* ---- Entrada de nombre y récords en overlay ---- */
+.overlay-name-entry {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+}
+
+.overlay-name-label {
+  font-size: 12px;
+  color: var(--value-color);
+  text-align: center;
+}
+
+.name-entry-row {
+  display: flex;
+  gap: 6px;
+}
+
+#name-input {
+  background: var(--kbd-bg);
+  border: 1px solid var(--kbd-border);
+  color: var(--text);
+  border-radius: 4px;
+  padding: 6px 8px;
+  font-size: 13px;
+  width: 120px;
+}
+
+#save-score-btn {
+  background: var(--btn-bg);
+  color: var(--btn-color);
+  border: none;
+  border-radius: 4px;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+#save-score-btn:hover {
+  background: var(--btn-hover);
+}
+
+.overlay-scores-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 240px;
+}
+
+/* ---- Menú de pausa ---- */
+.pause-box {
+  min-width: 220px;
+}
+
+.pause-title {
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: 4px;
+  color: var(--overlay-title-color);
+}
+
+.pause-view {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: stretch;
+  width: 100%;
+}
+
+.pause-view.hidden {
+  display: none;
+}
+
+.pause-view button {
+  background: var(--btn-bg);
+  color: var(--btn-color);
+  border: none;
+  border-radius: 6px;
+  padding: 10px 28px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  letter-spacing: 1px;
+  transition: background 0.15s;
+}
+
+.pause-view button:hover {
+  background: var(--btn-hover);
+}
+
+.pause-level {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: center;
+  margin-top: 4px;
+}
+
+.pause-level select {
+  background: var(--kbd-bg);
+  color: var(--text);
+  border: 1px solid var(--kbd-border);
+  border-radius: 4px;
+  padding: 6px 10px;
+  font-size: 14px;
+  font-family: inherit;
+}
+
+.controls-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+}
+
+.controls-list li {
+  font-size: 13px;
+  color: var(--controls-color);
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
