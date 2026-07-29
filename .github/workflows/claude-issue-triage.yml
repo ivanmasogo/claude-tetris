@@ -1,0 +1,76 @@
+name: Claude Issue Triage
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  triage:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+      id-token: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Triage issue with Claude
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          claude_args: >-
+            --allowed-tools
+            Bash(gh issue view *),Bash(gh issue edit *),Bash(gh issue comment *),Bash(gh label list *),Bash(gh label create *)
+          prompt: |
+            Eres un asistente de triaje de issues para un proyecto de Tetris en JavaScript vanilla.
+            El repositorio contiene los archivos: game.js (lógica del juego), index.html (estructura HTML) y style.css (estilos).
+
+            Se acaba de abrir el issue #${{ github.event.issue.number }}. Realiza las siguientes tareas en orden:
+
+            1. Lee el issue completo con: gh issue view ${{ github.event.issue.number }} --repo ${{ github.repository }}
+
+            2. Lista las labels existentes: gh label list --repo ${{ github.repository }}
+
+            3. Determina qué labels son apropiadas para el issue (elige entre: bug, enhancement, question, documentation, good first issue, invalid, wontfix, o cualquier otra que tenga sentido).
+               - Si alguna label necesaria no existe aún, créala con: gh label create <nombre> --repo ${{ github.repository }} --color <color-hex>
+               - Aplica las labels elegidas con: gh issue edit ${{ github.event.issue.number }} --repo ${{ github.repository }} --add-label "<label1>,<label2>"
+
+            4. Evalúa el título del issue. Si es ambiguo, demasiado corto o poco descriptivo, mejóralo para que sea claro y concreto con:
+               gh issue edit ${{ github.event.issue.number }} --repo ${{ github.repository }} --title "<nuevo título mejorado>"
+               Si el título ya es suficientemente claro, déjalo intacto.
+
+            5. Publica un comentario de diagnóstico en español con:
+               gh issue comment ${{ github.event.issue.number }} --repo ${{ github.repository }} --body "<comentario>"
+
+               El comentario debe estar escrito en **Markdown** y seguir exactamente esta estructura:
+
+               ---
+               ## 🔍 Diagnóstico del issue
+
+               ### Resumen del problema
+               <descripción breve y clara del issue>
+
+               ### 📁 Área afectada
+               | Archivo | Motivo |
+               |---------|--------|
+               | `game.js` / `index.html` / `style.css` | <razón> |
+
+               ### 🏷️ Labels asignadas
+               - `<label>` — <justificación breve>
+
+               ### 🛠️ Próximos pasos sugeridos
+               1. <acción concreta>
+               2. <acción concreta>
+               3. <acción concreta>
+
+               ### ✏️ Nota sobre el título *(solo si lo modificaste)*
+               > **Antes:** `<título original>`
+               > **Después:** `<título nuevo>`
+               > **Razón:** <motivo del cambio>
+
+               ---
+               *Triaje automático generado por Claude.*
